@@ -25,6 +25,27 @@ In the src/schematic-starter/schema.json file:
 }
 ```
 
+LMA::
+
+```json
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsStarter",
+  "title": "Options Schema",
+  "type": "object",
+  "required": [],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the componet",
+      "default": "ng-conf",
+      "x-prompt": "Enter the name of the component"
+    }
+  }
+}
+```
+
 ## Wire up the schema to the schematics CLI
 
 In the src/collection.json file:
@@ -34,6 +55,26 @@ In the src/collection.json file:
 ```json
 "factory": "./schematic-starter/index#schematicStarter",
 "schema": "./schematic-starter/schema.json"
+```
+
+LMA::
+
+```json
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "schematic-starter": {
+      "description": "A blank schematic.",
+      "factory": "./schematic-starter/index#schematicStarter",
+      "schema": "./schematic-starter/schema.json"
+    },
+    "ng-add": {
+      "description": "Add SchematicStarter to an application.",
+      "factory": "./schematic-starter/index#schematicStarter",
+      "schema": "./schematic-starter/schema.json"
+    }
+  }
+}
 ```
 
 ## Add options interface
@@ -60,6 +101,39 @@ const rules: Rule[] = [
   template({ ...strings, ..._options }),
   move("src/app/components")
 ];
+```
+
+LMA::
+
+```ts
+import {
+  Rule,
+  SchematicContext,
+  Tree,
+  apply,
+  url,
+  template,
+  move
+} from "@angular-devkit/schematics";
+import { strings } from "@angular-devkit/core";
+
+// declare AddFilesInterface
+interface AddFilesInterface {
+  name: string;
+}
+
+export function schematicStarter(_options: AddFilesInterface): Rule {
+  return (tree: Tree, context: SchematicContext) => {
+    // todo: use the template() function and provide the strings and _options members
+    const rules: Rule[] = [
+      template({ ...strings, ..._options }),
+      move("src/app/components")
+    ];
+
+    const source = url("./files");
+    return apply(source, rules)(context);
+  };
+}
 ```
 
 ## Add files to the files directory

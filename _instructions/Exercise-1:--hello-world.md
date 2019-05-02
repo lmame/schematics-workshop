@@ -1,4 +1,4 @@
-## Create a new schematics project using the CLI
+## Create a new schematics project using the CLI (NOT in the schematics-workshop folder)
 
 The Schematics CLI uses the following command pattern for executing schematics:
 

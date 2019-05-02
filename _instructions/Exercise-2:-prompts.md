@@ -36,6 +36,26 @@ Next, add an `enum` prompt such as the one below
 }
 ```
 
+LMA:: Full JSON:
+
+```json
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the person to 👋 to.",
+      "x-prompt": "What is the name of the person you want to say hi to?"
+    },
+    "fileExtension": {
+      "enum": ["ts", "html", "css", "spec.ts"],
+      "description": "The file extension type",
+      "default": "ts",
+      "x-prompt": "Select a file type extension"
+    }
+  }
+}
+```
+
 ## Connect the Schematic Schema
 
 In order utilize prompts, you need tell the CLI which schema to use.
@@ -52,6 +72,26 @@ In order utilize prompts, you need tell the CLI which schema to use.
 1. Open the src/hello-world/index.ts file and define a new `HelloWorldOptions` interface.
 1. The interface should have `name` and `fileExtension` members that are both of type `string`.
 1. Modify the `helloWorld` function to replace the `any` type for the `_options` argument with the new `HelloWorldOptions` interface.
+
+LMA::
+
+```ts
+// You don't have to export the function as default. You can also have more than one rule factory
+// per file.
+interface HelloWorldOptions {
+  name: string;
+  fileExtension: string;
+}
+
+export function helloWorld(_options: HelloWorldOptions): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
+    return tree.create(
+      `${_options.name}.${_options.fileExtension}`,
+      `<p>Hi, ${_options.name}!<p>`
+    );
+  };
+}
+```
 
 ## Modify the tree.create method
 

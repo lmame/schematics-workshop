@@ -28,10 +28,24 @@ const source = url("./files");
 return apply(source, rules)(context);
 ```
 
+LMA:: Build the schematics-workshop:
+
+```bash
+npm run build
+```
+
 ## Execute with the Sandbox
 
 ```bash
 npm test
+```
+
+LMA::
+schematics-workshop/package.json
+npm test actually runs:
+
+```json
+"test": "npm run build:clean:launch",
 ```
 
 You should have an `index.html` in the root of the `sandbox` folder. This file was read from the src/schematic-starter/files directory by the schematic executed in the sandbox.
